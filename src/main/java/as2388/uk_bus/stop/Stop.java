@@ -1,16 +1,22 @@
 package as2388.uk_bus.stop;
 
 public class Stop {
+    private final String id;
     private final String name;
     private final String street;
-    private final double lat;
-    private final double lon;
+    private final String lat;
+    private final String lon;
 
-    public Stop(String name, String street, double lat, double lon) {
+    public Stop(String id, String name, String street, String lat, String lon) {
+        this.id = id;
         this.name = name;
         this.street = street;
         this.lat = lat;
         this.lon = lon;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getName() {
@@ -21,11 +27,11 @@ public class Stop {
         return street;
     }
 
-    public double getLat() {
+    public String getLat() {
         return lat;
     }
 
-    public double getLon() {
+    public String getLon() {
         return lon;
     }
 }
