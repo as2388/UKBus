@@ -11,6 +11,7 @@ import org.jsoup.select.Elements;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -24,14 +25,15 @@ public class BusServlet {
 
     @GET
     @Path("/test")
-    public Response printMessage() {
+    public Response test() {
         return Response.ok().entity("Mission Control reads you loud and clear").build();
     }
 
     @GET
-    @Path("/")
-    public Response test() throws IOException {
-        Document doc = Jsoup.connect("http://www.nextbuses.mobi/WebView/BusStopSearch/BusStopSearchResults/ll_56.457373399999994,-3.0588688~?currentPage=2").get();
+    @Path("/search")
+    public Response listByLatLon(@QueryParam("lat") String qlat, @QueryParam("lon") String qlon) throws IOException {
+        System.out.println("http://www.nextbuses.mobi/WebView/BusStopSearch/BusStopSearchResults/ll_" + qlat + "," + qlon + "~?currentPage=0");
+        Document doc = Jsoup.connect("http://www.nextbuses.mobi/WebView/BusStopSearch/BusStopSearchResults/ll_" + qlat + "," + qlon + "~?currentPage=0").get();
         Elements rawStops = doc.getElementsByClass("BusStops").get(0).getElementsByTag("tr");
 
         List<Stop> stops = new LinkedList<>();
@@ -41,7 +43,7 @@ public class BusServlet {
             Element stopBusDataEl = stopEl.getElementsByTag("a").get(0);
             String stopName = stopBusDataEl.html();
             String stopId = findString("BusStopSearchResults/(.*)\\?", stopBusDataEl.attr("href"));
-            String stopStreet = findString("br /> (.*) </p>" , stopEl.html());
+            String stopStreet = findString("br /> (.*) </p>" , stopEl.html()).replace("on ", "");
 
             Element stopLocationEl = stopEl.getElementsByTag("a").get(1);
             String[] stopLL = findString("ll_(.*)\\~\\?", stopLocationEl.attr("href")).split(",");
