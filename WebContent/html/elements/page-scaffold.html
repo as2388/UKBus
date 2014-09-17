@@ -11,11 +11,9 @@
             }
         </style>
         <template if="{{stops}}">
-            <google-map latitude="{{lat}}" longitude="{{lon}}" fitToMarkers disableDefaultUI>
+            <google-map latitude="[[lat]]" longitude="[[lon]]"  disableDefaultUI zoom="16" on-center-change="{{centerChange}}">
                 <template repeat="{{stop in stops}}">
-                    <google-map-marker latitude="{{stop.lat}}" longitude="{{stop.lon}}" title="{{stop.name}}, {{stop.street}}">
-
-                    </google-map-marker>
+                    <google-map-marker latitude="{{stop.lat}}" longitude="{{stop.lon}}" title="{{stop.name}}, {{stop.street}}"></google-map-marker>
                 </template>
             </google-map>
         </template>
@@ -41,11 +39,18 @@
 
             nearbyStopsLoaded: function(e, detail) {
                 this.stops = detail.response;
-                console.log(this.stops);
+//                console.log(this.stops);
+
             },
 
-            latChanged: function(){
-                console.log(this.lat);
+            centerChange: function(e, detail){
+
+//                console.log("center change");
+
+                this.lat = detail.latitude;
+                this.lon = detail.longitude;
+
+                this.$.ajaxNearbyStops.go();
             }
         })
     </script>
