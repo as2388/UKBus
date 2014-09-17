@@ -9,11 +9,22 @@
                 display: block;
                 height: 100%;
             }
+            .departures {
+                -webkit-animation: openDrawer 0.33s forwards;
+            }
+            @-webkit-keyframes openDrawer {
+                from {
+                    margin-left: 0
+                }
+                to {
+                    margin-left: 200px;
+                }
+            }
         </style>
         <template if="{{stops}}">
-            <google-map latitude="[[lat]]" longitude="[[lon]]"  disableDefaultUI zoom="16" on-center-change="{{centerChange}}">
+            <google-map latitude="[[lat]]" longitude="[[lon]]" disableDefaultUI zoom="16" on-center-change="{{centerChange}}" class="{{showDepartures ? 'departures' : ''}}">
                 <template repeat="{{stop in stops}}">
-                    <google-map-marker latitude="{{stop.lat}}" longitude="{{stop.lon}}" title="{{stop.name}}, {{stop.street}}"></google-map-marker>
+                    <google-map-marker stopId="{{stop.id}}" on-marker-clicked="{{markerClicked}}" latitude="{{stop.lat}}" longitude="{{stop.lon}}" title="{{stop.name}}, {{stop.street}}"></google-map-marker>
                 </template>
             </google-map>
         </template>
@@ -39,18 +50,18 @@
 
             nearbyStopsLoaded: function(e, detail) {
                 this.stops = detail.response;
-//                console.log(this.stops);
-
             },
 
             centerChange: function(e, detail){
-
-//                console.log("center change");
-
                 this.lat = detail.latitude;
                 this.lon = detail.longitude;
 
                 this.$.ajaxNearbyStops.go();
+            },
+
+            markerClicked: function() {
+                console.log('marker-clicked');
+                this.showDepartures = true;
             }
         })
     </script>
