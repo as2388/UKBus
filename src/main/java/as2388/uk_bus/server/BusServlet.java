@@ -35,8 +35,10 @@ public class BusServlet {
         System.out.println("http://www.nextbuses.mobi/WebView/BusStopSearch/BusStopSearchResults/ll_" + qlat + "," + qlon + "~?currentPage=0");
         Document doc = Jsoup.connect("http://www.nextbuses.mobi/WebView/BusStopSearch/BusStopSearchResults/ll_" + qlat + "," + qlon + "~?currentPage=0").get();
         Elements rawStops = doc.getElementsByClass("BusStops").get(0).getElementsByTag("tr");
+        String mapSrc = doc.getElementById("sMap").attr("src");
 
         List<Stop> stops = new LinkedList<>();
+        int counter = 1;
         for (Element rawStop : rawStops) {
             Element stopEl = rawStop.getElementsByTag("td").get(1);
 
@@ -46,11 +48,12 @@ public class BusServlet {
             String stopStreet = findString("br /> (.*) </p>" , stopEl.html()).replace("on ", "");
 
             Element stopLocationEl = stopEl.getElementsByTag("a").get(1);
-            String[] stopLL = findString("ll_(.*)\\~\\?", stopLocationEl.attr("href")).split(",");
+            String[] stopLL = findString("label:" + counter + "\\|((\\d|\\.|,|\\-)+)", mapSrc).split(",");
             String lat = stopLL[0];
             String lon = stopLL[1];
 
             stops.add(new Stop(stopId, stopName, stopStreet, lat, lon));
+            counter++;
         }
 
        return Response.ok().entity(mapper.writeValueAsString(stops)).build();
