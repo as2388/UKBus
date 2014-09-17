@@ -1,3 +1,4 @@
 .idea
 target/
 *.iml
+WebContent/html/bower_components/

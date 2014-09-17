@@ -1,0 +1,47 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../bower_components/google-map/google-map.html">
+
+<polymer-element name="page-scaffold">
+    <template>
+        <style>
+            google-map {
+                display: block;
+                height: 100%;
+            }
+        </style>
+        <template if="{{stops}}">
+            <google-map latitude="{{lat}}" longitude="{{lon}}" fitToMarkers disableDefaultUI>
+                <template repeat="{{stop in stops}}">
+                    <google-map-marker latitude="{{stop.lat}}" longitude="{{stop.lon}}"></google-map-marker>
+                </template>
+            </google-map>
+        </template>
+
+        <core-ajax id="ajaxNearbyStops" url="http://81.158.41.149:8080/UKBus/rest/stops/search?lat={{lat}}&lon={{lon}}"
+                   on-core-response="{{nearbyStopsLoaded}}" handleAs="json"></core-ajax>
+
+
+    </template>
+    <script>
+        Polymer({
+            domReady: function() {
+                console.log(this.$);
+                navigator.geolocation.getCurrentPosition(this.positionLoaded.bind(this));
+            },
+
+            positionLoaded: function(position) {
+                console.log("position determined");
+                this.lat = position.coords.latitude;
+                this.lon = position.coords.longitude;
+
+                this.$.ajaxNearbyStops.go();
+            },
+
+            nearbyStopsLoaded: function(e, detail) {
+                this.stops = detail.response;
+                console.log(this.stops);
+            }
+        })
+    </script>
+</polymer-element>
