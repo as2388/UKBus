@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="../bower_components/paper-shadow/paper-shadow.html">
 <link rel="import" href="../bower_components/google-map/google-map.html">
 
 <polymer-element name="page-scaffold">
@@ -7,6 +8,12 @@
         <style>
             google-map {
                 display: block;
+                height: 100%;
+            }
+            #mapContainer {
+                height: 100%;
+            }
+            #mainContainer {
                 height: 100%;
             }
             .departures {
@@ -22,11 +29,18 @@
             }
         </style>
         <template if="{{stops}}">
-            <google-map latitude="[[lat]]" longitude="[[lon]]" disableDefaultUI zoom="16" on-center-change="{{centerChange}}" class="{{showDepartures ? 'departures' : ''}}">
-                <template repeat="{{stop in stops}}">
-                    <google-map-marker stopId="{{stop.id}}" on-marker-clicked="{{markerClicked}}" latitude="{{stop.lat}}" longitude="{{stop.lon}}" title="{{stop.name}}, {{stop.street}}"></google-map-marker>
-                </template>
-            </google-map>
+            <!--<div id="mainContainer" layout horizontal>-->
+                <div style="background: #3f51b5; height: 100%; width: 200px; position: absolute; top: 0; left: 0;"></div>
+
+                <div id="mapContainer" class="{{showDepartures ? 'departures' : ''}}">
+                    <google-map latitude="[[lat]]" longitude="[[lon]]" disableDefaultUI zoom="16" on-center-change="{{centerChange}}">
+                        <template repeat="{{stop in stops}}">
+                            <google-map-marker stopId="{{stop.id}}" on-marker-clicked="{{markerClicked}}" latitude="{{stop.lat}}" longitude="{{stop.lon}}" title="{{stop.name}}, {{stop.street}}"></google-map-marker>
+                        </template>
+                    </google-map>
+                    <paper-shadow z="5"></paper-shadow>
+                </div>
+            <!--</div>-->
         </template>
 
         <core-ajax id="ajaxNearbyStops" url="http://81.158.41.149:8080/UKBus/rest/stops/search?lat={{lat}}&lon={{lon}}"
