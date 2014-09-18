@@ -1,31 +1,61 @@
 <link rel="import" href="../../bower_components/polymer/polymer.js">
 
-<polymer-element name="departures-clock" attributes="radius" noscript>
+<polymer-element name="departures-clock" attributes="radius">
     <template>
         <style>
             #clock {
                 fill: #5c6bc0;
-                stroke: white;
                 stroke-linecap: round;
+            }
+            #handsCircle {
+                fill: white;
             }
             #h_pointer {
                 stroke-width: 2px;
             }
-            #delimiters, #s_pointer {
+            #s_pointer {
                 stroke-width: 1px;
+            }
+            #s_pointer, #h_pointer {
+                /*stroke: #304ffe;*/
+                stroke: white;
             }
             #m_pointer {
                 stroke-width: 2px;
+                stroke: white;
             }
         </style>
 
         <svg id="clock" viewBox="0 0 100 100" width="{{radius * 2}}" height="{{radius * 2}}">
-            <circle id="surface" cx="50" cy="50" r="45"></circle>
+            <circle id="background" cx="50" cy="50" r="45"></circle>
             <g id="pointers">
-                <line id="h_pointer" x1="50" y1="50" x2="50" y2="27" ></line>
-                <line id="m_pointer" x1="50" y1="50" x2="50" y2="17" ></line>
-                <line id="s_pointer" x1="50" y1="50" x2="50" y2="10" ></line>
+                <line id="h_pointer" x1="50" y1="50" x2="50" y2="32" transform="rotate({{hoursRotation}}, 50, 50)"></line>
+                <line id="m_pointer" x1="50" y1="50" x2="50" y2="17" transform="rotate({{minutesRotation}}, 50, 50)"></line>
+                <line id="s_pointer" x1="50" y1="50" x2="50" y2="10" transform="rotate({{secondsRotation}}, 50, 50)"></line>
             </g>
+            <circle id="handsCircle" cx="50" cy="50" r="2"></circle>
         </svg>
     </template>
+    <script>
+        Polymer({
+            created: function() {
+                this.updateRotationAngles();
+            },
+
+            updateRotationAngles: function() {
+                with (new Date) {
+                    var seconds = (getSeconds() + getMilliseconds() / 1000);
+                    var minutes = getMinutes() + getSeconds() / 60;
+                    var hours = getHours() % 12 + minutes / 60;
+
+                    this.secondsRotation = 6 * seconds; //"6 *" in order to be out of 360deg
+                    this.minutesRotation = 6 * minutes;
+                    this.hoursRotation = 30 * hours;
+                }
+                this.job('update-rotation-angles', function() {
+                    this.updateRotationAngles();
+                }, 50);
+            }
+        })
+    </script>
 </polymer-element>
