@@ -2,11 +2,14 @@
 <link rel="import" href="../bower_components/core-ajax/core-ajax.html">
 <link rel="import" href="../bower_components/paper-shadow/paper-shadow.html">
 <link rel="import" href="../bower_components/google-map/google-map.html">
-<link rel="import" href="departures-panel.html">
+<link rel="import" href="departures/departures-panel.html">
 
 <polymer-element name="page-scaffold">
     <template>
         <style>
+            :host {
+                overflow: hidden;
+            }
             google-map {
                 display: block;
                 height: 100%;
@@ -25,7 +28,7 @@
                     margin-left: 0
                 }
                 to {
-                    margin-left: 200px;
+                    margin-left: 300px;
                 }
             }
             departures-panel {
@@ -35,11 +38,26 @@
                 height: 100%;
                 width: 300px;
             }
+            #loadingIndicator {
+                position: absolute;
+                width: 600px;
+                left: 50%;
+                text-align: center;
+                top: 40%;
+                margin-left: -300px;
+                color: #212121;
+            }
         </style>
+        
+        <div id="loadingIndicator">
+            Finding stops near you...
+        </div>
+
+        <departures-panel id="departuresPanel" hidden?="{{!showDepartures}}"></departures-panel>
         <template if="{{stops}}">
             <!--<div id="mainContainer" layout horizontal>-->
                 <!--<div style="background: #3f51b5; height: 100%; width: 200px; position: absolute; top: 0; left: 0;"></div>-->
-                <departures-panel></departures-panel>
+
 
                 <div id="mapContainer" class="{{showDepartures ? 'departures' : ''}}">
                     <google-map latitude="[[lat]]" longitude="[[lon]]" disableDefaultUI zoom="16" on-center-change="{{centerChange}}">
@@ -82,9 +100,10 @@
                 this.$.ajaxNearbyStops.go();
             },
 
-            markerClicked: function() {
+            markerClicked: function(e, detail) {
                 console.log('marker-clicked');
                 this.showDepartures = true;
+                this.$.departuresPanel.stop = detail;
             }
         })
     </script>

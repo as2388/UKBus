@@ -1,0 +1,23 @@
+<link rel="import" href="../../bower_components/polymer/polymer.js">
+
+<polymer-element name="departures-clock" attributes="radius" noscript>
+    <template>
+        <style>
+            #face {
+                fill: #5c6bc0;
+            }
+            #handH, #handM, #handS {
+                stroke-width: 1px;
+            }
+        </style>
+
+        <svg width="{{radius * 2}}" height="{{radius * 2}}">
+            <circle id="face" cx="{{radius}}" cy="{{radius}}" r="{{radius}}"></circle>
+            <g id="hands">
+                <line id="handH" x1="50" y1="50" x2="50" y2="27" ></line>
+                <line id="handM" x1="50" y1="50" x2="50" y2="17" ></line>
+                <line id="handS" x1="50" y1="50" x2="50" y2="13" transform="rotate(17, 100, 100)"></line>
+            </g>
+        </svg>
+    </template>
+</polymer-element>

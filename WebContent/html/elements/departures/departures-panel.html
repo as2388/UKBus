@@ -1,0 +1,27 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="departures-clock.html">
+
+<polymer-element name="departures-panel" attributes="stop" noscript>
+    <template>
+        <style>
+            #mainContainer {
+                background: #3f51b5;
+                height: 100%;
+                padding: 20px 10px 0 10px;
+                color: white;
+            }
+            h3 {
+                font-weight: normal;
+                margin: 0 0 50px;
+            }
+        </style>
+
+        <div id="mainContainer">
+            <h3>{{stop.name}}</h3>
+
+            <div layout vertical center>
+                <departures-clock radius="100" style="width: 200px;"></departures-clock>
+            </div>
+        </div>
+    </template>
+</polymer-element>
