@@ -3,20 +3,28 @@
 <polymer-element name="departures-clock" attributes="radius" noscript>
     <template>
         <style>
-            #face {
+            #clock {
                 fill: #5c6bc0;
+                stroke: white;
+                stroke-linecap: round;
             }
-            #handH, #handM, #handS {
+            #h_pointer {
+                stroke-width: 2px;
+            }
+            #delimiters, #s_pointer {
                 stroke-width: 1px;
+            }
+            #m_pointer {
+                stroke-width: 2px;
             }
         </style>
 
-        <svg width="{{radius * 2}}" height="{{radius * 2}}">
-            <circle id="face" cx="{{radius}}" cy="{{radius}}" r="{{radius}}"></circle>
-            <g id="hands">
-                <line id="handH" x1="50" y1="50" x2="50" y2="27" ></line>
-                <line id="handM" x1="50" y1="50" x2="50" y2="17" ></line>
-                <line id="handS" x1="50" y1="50" x2="50" y2="13" transform="rotate(17, 100, 100)"></line>
+        <svg id="clock" viewBox="0 0 100 100" width="{{radius * 2}}" height="{{radius * 2}}">
+            <circle id="surface" cx="50" cy="50" r="45"></circle>
+            <g id="pointers">
+                <line id="h_pointer" x1="50" y1="50" x2="50" y2="27" ></line>
+                <line id="m_pointer" x1="50" y1="50" x2="50" y2="17" ></line>
+                <line id="s_pointer" x1="50" y1="50" x2="50" y2="10" ></line>
             </g>
         </svg>
     </template>
