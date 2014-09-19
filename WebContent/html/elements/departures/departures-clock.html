@@ -67,7 +67,8 @@
 
             <g id="departureCircles">
                 <template repeat="{{departure in departures}}">
-                    <circle cx="50" cy="7.5" r="2" transform="rotate({{departure.angle}}, 50, 50)" style="fill: #a2f78d;" class="fade-in" on-></circle>
+                    <circle cx="50" cy="7.5" r="2" transform="rotate({{departure.angle}}, 50, 50)"
+                            style="fill: {{departure.color}};" class="fade-in" on-></circle>
                 </template>
             </g>
         </svg>
@@ -78,10 +79,15 @@
         Polymer({
             created: function() {
                 this.updateRotationAngles();
+                this.buildColorLibrary();
             },
 
             buildColorLibrary: function() {
-
+                this.routeColors = [];
+                this.routeColors.push("#ff7997"); //red
+                this.routeColors.push("#84ffff"); //cyan
+                this.routeColors.push("#a2f78d"); //green
+                this.routeColors.push("#ffd180"); //orange
             },
 
             updateRotationAngles: function() {
@@ -119,12 +125,17 @@
                         this.departures[i].angle = 6 * this.departures[i].time.split(":")[1];
                     }
                     console.log(this.departures[i].time, this.departures[i].angle);
+                    this.computeColor(this.departures[i]);
                 }
-//
-//                this.departures = [];
-//                for (var i = 0; i < 60; i++ ) {
-//                    this.departures[i] = {angle: 6 * i};
-//                }
+            },
+
+            computeColor: function(departure) {
+                var ASCIISum = 0;
+                for (var i = 0; i < departure.route.length; i++) {
+                    ASCIISum += departure.route.charCodeAt(i);
+                }
+
+                departure.color = this.routeColors[ASCIISum % this.routeColors.length];
             }
         })
     </script>
