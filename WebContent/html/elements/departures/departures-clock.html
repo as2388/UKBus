@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
+<link rel="import" href="next-on-route/next-on-route-group.html">
 
 <polymer-element name="departures-clock" attributes="radius stopId">
     <template>
@@ -68,12 +69,15 @@
             <g id="departureCircles">
                 <template repeat="{{departure in departures}}">
                     <circle cx="50" cy="7.5" r="2" transform="rotate({{departure.angle}}, 50, 50)"
-                            style="fill: {{departure.color}};" class="fade-in" on-></circle>
+                            style="fill: {{departure.color}};" class="fade-in"></circle>
                 </template>
             </g>
         </svg>
 
         <div flex class="center-text {{loadingDepartures ? 'fade-in' : 'fade-out'}}">Loading departures...</div>
+        <div flex class="center-text {{noDepartures ? 'fade-in' : 'fade-out'}}" style="margin-top: -19px;">No departures in the next hour</div>
+
+        <next-on-route-group departures="{{departures}}"></next-on-route-group>
     </template>
     <script>
         Polymer({
@@ -109,10 +113,17 @@
             stopIdChanged: function() {
                 this.loadingDepartures = true;
                 this.departures = null;
+                this.noDepartures = false;
             },
 
             departuresLoaded: function(e, detail) {
+                console.log(detail);
+
                 this.loadingDepartures = false;
+                if (detail.response.length == 0) {
+                    this.noDepartures = true;
+                    return;
+                }
 
                 this.departures = detail.response;
 

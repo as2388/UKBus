@@ -1,0 +1,20 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<polymer-element name="next-on-route" attributes="route time color" noscript>
+    <template>
+        <style>
+            .next-on-route-div {
+                text-align: center;
+            }
+            .route-label {
+                font-weight: bold;
+            }
+            .route-time {
+                opacity: 0.54;
+            }
+        </style>
+
+        <div flex class="next-on-route-div route-label" style="color: {{color}};">{{route}}</div>
+        <div flex class="next-on-route-div route-time">{{time}}</div>
+    </template>
+</polymer-element>

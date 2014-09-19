@@ -1,0 +1,17 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="next-on-route.html">
+
+<polymer-element name="next-on-route-group" attributes="departures">
+    <template>
+        <div layout horizontal>
+            <template repeat="{{departure in departures}}">
+                <next-on-route flex route="{{departure.route}}" time="{{departure.time}}" color="{{departure.color}}"></next-on-route>
+            </template>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            
+        })
+    </script>
+</polymer-element>
