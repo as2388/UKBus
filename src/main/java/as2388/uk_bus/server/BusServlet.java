@@ -47,7 +47,9 @@ public class BusServlet {
             Element stopEl = rawStop.getElementsByTag("td").get(1);
 
             Element stopBusDataEl = stopEl.getElementsByTag("a").get(0);
-            String stopName = stopBusDataEl.html();
+            String stopNameMain = stopBusDataEl.html().split(" \\(")[0];
+            String stopNameBracket = stopBusDataEl.html().split(" \\(")[1].replaceAll("\\)", "");
+            String stopName = stopNameBracket + " " + stopNameMain;
             String stopId = findString("BusStopSearchResults/(.*)\\?", stopBusDataEl.attr("href"));
             String stopStreet = findString("br /> (.*) </p>" , stopEl.html()).replace("on ", "");
 
