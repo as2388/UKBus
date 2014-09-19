@@ -1,6 +1,7 @@
-<link rel="import" href="../../bower_components/polymer/polymer.js">
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
 
-<polymer-element name="departures-clock" attributes="radius">
+<polymer-element name="departures-clock" attributes="radius stopId">
     <template>
         <style>
             #clock {
@@ -26,6 +27,9 @@
             }
         </style>
 
+        <core-ajax id="ajaxLoadDepartures" auto handleAs="json" on-core-response="{{departuresLoaded}}"
+                   url="http://81.158.41.149:8080/UKBus/rest/stops/departures?stopId={{stopId}}"></core-ajax>
+
         <svg id="clock" viewBox="0 0 100 100" width="{{radius * 2}}" height="{{radius * 2}}">
             <circle id="background" cx="50" cy="50" r="45"></circle>
             <g id="pointers">
@@ -34,6 +38,12 @@
                 <line id="s_pointer" x1="50" y1="50" x2="50" y2="10" transform="rotate({{secondsRotation}}, 50, 50)"></line>
             </g>
             <circle id="handsCircle" cx="50" cy="50" r="2"></circle>
+
+            <g id="departureCircles">
+                <template repeat="{{departure in departures}}">
+                    <circle cx="50" cy="7.5" r="2" transform="rotate({{departure.angle}}, 50, 50)" style="fill: #a2f78d;"></circle>
+                </template>
+            </g>
         </svg>
     </template>
     <script>
@@ -43,6 +53,10 @@
             },
 
             updateRotationAngles: function() {
+                this.job('update-rotation-angles', function() {
+                    this.updateRotationAngles();
+                }, 50);
+
                 with (new Date) {
                     var seconds = (getSeconds() + getMilliseconds() / 1000);
                     var minutes = getMinutes() + getSeconds() / 60;
@@ -52,9 +66,25 @@
                     this.minutesRotation = 6 * minutes;
                     this.hoursRotation = 30 * hours;
                 }
-                this.job('update-rotation-angles', function() {
-                    this.updateRotationAngles();
-                }, 50);
+            },
+
+            departuresLoaded: function(e, detail) {
+                this.departures = detail.response;
+
+                var date = new Date();
+                for (var i = 0; i < this.departures.length; i ++) {
+                    if (this.departures[i].time.lastIndexOf("min") > -1) {
+                        this.departures[i].angle = new Date().getMinutes() + this.departures[i].time.split("min")[0];
+                    }
+                    else {
+                        this.departures[i].angle = 6 * this.departures[i].time.split(":")[1];
+                    }
+                }
+//
+//                this.departures = [];
+//                for (var i = 0; i < 60; i++ ) {
+//                    this.departures[i] = {angle: 6 * i};
+//                }
             }
         })
     </script>

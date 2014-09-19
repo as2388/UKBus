@@ -77,6 +77,8 @@
     </template>
     <script>
         Polymer({
+//            stops: [],
+
             domReady: function() {
                 navigator.geolocation.getCurrentPosition(this.positionLoaded.bind(this));
             },
@@ -90,7 +92,11 @@
             },
 
             nearbyStopsLoaded: function(e, detail) {
-                this.stops = detail.response;
+                if (this.stops == undefined) {
+                    this.stops = detail.response;
+                } else {
+                    this.stops = this.stops.concat(detail.response);
+                }
             },
 
             centerChange: function(e, detail){
