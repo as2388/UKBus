@@ -10,19 +10,25 @@
                 padding: 20px 10px 0 10px;
                 color: white;
             }
-            h3 {
+            h3, h4 {
                 font-weight: normal;
-                margin: 0 0 50px;
+                margin: 0;
+            }
+            h4 {
+                opacity: 0.54;
+            }
+            departures-clock {
+                margin-top: 50px;
             }
         </style>
 
         <div id="mainContainer">
-            <h3>{{stop.name}}</h3>
+            <h3>{{stop.street}}</h3>
+            <h4>{{stop.name}}</h4>
 
             <div layout vertical center>
                 <departures-clock stopId="{{stop.id}}" radius="120" style="width: 240px;"></departures-clock>
             </div>
-
         </div>
     </template>
 </polymer-element>

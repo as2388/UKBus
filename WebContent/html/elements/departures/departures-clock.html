@@ -67,7 +67,7 @@
 
             <g id="departureCircles">
                 <template repeat="{{departure in departures}}">
-                    <circle cx="50" cy="7.5" r="2" transform="rotate({{departure.angle}}, 50, 50)" style="fill: #a2f78d;" class="fade-in"></circle>
+                    <circle cx="50" cy="7.5" r="2" transform="rotate({{departure.angle}}, 50, 50)" style="fill: #a2f78d;" class="fade-in" on-></circle>
                 </template>
             </g>
         </svg>
@@ -78,6 +78,10 @@
         Polymer({
             created: function() {
                 this.updateRotationAngles();
+            },
+
+            buildColorLibrary: function() {
+
             },
 
             updateRotationAngles: function() {
