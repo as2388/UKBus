@@ -138,6 +138,11 @@
                     console.log(this.departures[i].time, this.departures[i].angle);
                     this.computeColor(this.departures[i]);
                 }
+
+                //poll for more data
+                this.job('poll-departures', function() {
+                    this.$.ajaxLoadDepartures.go();
+                }.bind(this), 20000);
             },
 
             computeColor: function(departure) {
