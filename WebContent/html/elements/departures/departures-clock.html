@@ -25,6 +25,32 @@
                 stroke-width: 2px;
                 stroke: white;
             }
+            .center-text {
+                text-align: center;
+            }
+
+            .fade-in {
+                -webkit-animation: fadeIn 0.33s forwards;
+            }
+            @-webkit-keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+            .fade-out {
+                -webkit-animation: fadeOut 0.33s forwards;
+            }
+            @-webkit-keyframes fadeOut {
+                from {
+                    opacity: 1;
+                }
+                to {
+                    opacity: 0;
+                }
+            }
         </style>
 
         <core-ajax id="ajaxLoadDepartures" auto handleAs="json" on-core-response="{{departuresLoaded}}"
@@ -41,10 +67,12 @@
 
             <g id="departureCircles">
                 <template repeat="{{departure in departures}}">
-                    <circle cx="50" cy="7.5" r="2" transform="rotate({{departure.angle}}, 50, 50)" style="fill: #a2f78d;"></circle>
+                    <circle cx="50" cy="7.5" r="2" transform="rotate({{departure.angle}}, 50, 50)" style="fill: #a2f78d;" class="fade-in"></circle>
                 </template>
             </g>
         </svg>
+
+        <div flex class="center-text {{loadingDepartures ? 'fade-in' : 'fade-out'}}">Loading departures...</div>
     </template>
     <script>
         Polymer({
@@ -68,17 +96,25 @@
                 }
             },
 
+            stopIdChanged: function() {
+                this.loadingDepartures = true;
+                this.departures = null;
+            },
+
             departuresLoaded: function(e, detail) {
+                this.loadingDepartures = false;
+
                 this.departures = detail.response;
 
                 var date = new Date();
                 for (var i = 0; i < this.departures.length; i ++) {
                     if (this.departures[i].time.lastIndexOf("min") > -1) {
-                        this.departures[i].angle = new Date().getMinutes() + this.departures[i].time.split("min")[0];
+                        this.departures[i].angle = 6 * (new Date().getMinutes() + parseInt(this.departures[i].time.split(" min")[0]));
                     }
                     else {
                         this.departures[i].angle = 6 * this.departures[i].time.split(":")[1];
                     }
+                    console.log(this.departures[i].time, this.departures[i].angle);
                 }
 //
 //                this.departures = [];
