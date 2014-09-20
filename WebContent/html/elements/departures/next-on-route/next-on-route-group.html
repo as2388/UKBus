@@ -3,9 +3,9 @@
 
 <polymer-element name="next-on-route-group" attributes="departures">
     <template>
-        <div layout horizontal>
+        <div layout horizontal wrap>
             <template repeat="{{departure in condensedDepartures}}">
-                <next-on-route flex route="{{departure.route}}" time="{{departure.time}}" color="{{departure.color}}"></next-on-route>
+                <next-on-route style="min-width: 70px;" flex route="{{departure.route}}" time="{{departure.time}}" color="{{departure.color}}"></next-on-route>
             </template>
         </div>
     </template>
