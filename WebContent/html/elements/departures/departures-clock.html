@@ -54,7 +54,7 @@
             }
         </style>
 
-        <core-ajax id="ajaxLoadDepartures" auto handleAs="json" on-core-response="{{departuresLoaded}}"
+        <core-ajax id="ajaxLoadDepartures" handleAs="json" on-core-response="{{departuresLoaded}}"
                    url="http://81.158.41.149:8080/UKBus/rest/stops/departures?stopId={{stopId}}"></core-ajax>
 
         <svg id="clock" viewBox="0 0 100 100" width="{{radius * 2}}" height="{{radius * 2}}">
@@ -115,6 +115,7 @@
                 this.loadingDepartures = true;
                 this.departures = null;
                 this.noDepartures = false;
+                this.$.ajaxLoadDepartures.go();
             },
 
             departuresLoaded: function(e, detail) {
