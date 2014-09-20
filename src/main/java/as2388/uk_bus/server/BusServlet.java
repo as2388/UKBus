@@ -35,9 +35,46 @@ public class BusServlet {
 
     @GET
     @Path("/search")
-    public Response listByLatLon(@QueryParam("lat") String qlat, @QueryParam("lon") String qlon) throws IOException {
-        System.out.println("http://www.nextbuses.mobi/WebView/BusStopSearch/BusStopSearchResults/ll_" + qlat + "," + qlon + "~?currentPage=0");
-        Document doc = Jsoup.connect("http://www.nextbuses.mobi/WebView/BusStopSearch/BusStopSearchResults/ll_" + qlat + "," + qlon + "~?currentPage=0").get();
+    public Response listByLatLon(@QueryParam("lat") final String qlat, @QueryParam("lon") final String qlon) throws IOException, InterruptedException {
+        final List<Stop> stops = new LinkedList<>();
+
+//        stops.addAll(listStopsAtPage(qlat, qlon, "0"));
+
+        Thread[] threads = new Thread[3];
+
+        for (int i = 0; i < threads.length; i++) {
+            final int pageNumber = i;
+            threads[i] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        stops.addAll(listStopsAtPage(qlat, qlon, String.valueOf(pageNumber)));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+        for (Thread thread : threads) {
+            thread.start();
+        }
+
+        for (Thread thread : threads) {
+            thread.join();
+        }
+
+       return Response.ok().entity(mapper.writeValueAsString(stops)).build();
+    }
+
+    private List<Stop> listStopsAtPage(String qlat, String qlon, String page) throws IOException {
+//        System.out.println("http://www.nextbuses.mobi/WebView/BusStopSearch/BusStopSearchResults/ll_" + qlat + "," + qlon + "~?currentPage=0");
+        Document doc = Jsoup.connect("http://www.nextbuses.mobi/WebView/BusStopSearch/BusStopSearchResults/ll_" + qlat + "," + qlon + "~?currentPage=" + page).get();
+
+        if (doc.getElementsByClass("BusStops").size() == 0) {
+            return new LinkedList<Stop>();
+        }
+
         Elements rawStops = doc.getElementsByClass("BusStops").get(0).getElementsByTag("tr");
         String mapSrc = doc.getElementById("sMap").attr("src");
 
@@ -62,7 +99,7 @@ public class BusServlet {
             counter++;
         }
 
-       return Response.ok().entity(mapper.writeValueAsString(stops)).build();
+        return stops;
     }
 
     @GET
