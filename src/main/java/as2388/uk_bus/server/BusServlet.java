@@ -2,9 +2,7 @@ package as2388.uk_bus.server;
 
 import as2388.uk_bus.stop.Departure;
 import as2388.uk_bus.stop.Stop;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.jmx.snmp.internal.SnmpSubSystem;
 import org.joda.time.LocalDateTime;
 import org.joda.time.Minutes;
 import org.jsoup.Jsoup;
@@ -17,7 +15,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -37,8 +34,6 @@ public class BusServlet {
     @Path("/search")
     public Response listByLatLon(@QueryParam("lat") final String qlat, @QueryParam("lon") final String qlon) throws IOException, InterruptedException {
         final List<Stop> stops = new LinkedList<>();
-
-//        stops.addAll(listStopsAtPage(qlat, qlon, "0"));
 
         Thread[] threads = new Thread[3];
 
@@ -132,10 +127,6 @@ public class BusServlet {
     }
 
     private boolean withinAnHour(String time) {
-        System.out.println(time);
-        System.out.println(time.split(":")[0]);
-        System.out.println(time.split(":")[1]);
-
         LocalDateTime timeNow = new LocalDateTime();
         LocalDateTime busTime = new LocalDateTime(timeNow.getYear(), timeNow.getMonthOfYear(), timeNow.getDayOfMonth(),
                 Integer.valueOf(time.split(":")[0]), Integer.valueOf(time.split(":")[1]), 0);
