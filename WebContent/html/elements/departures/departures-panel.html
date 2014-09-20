@@ -24,8 +24,10 @@
         </style>
 
         <div id="mainContainer">
-            <h3 class="{{stop.street ? 'fade-in' : ''}}">{{stop.street ? stop.street : '&nbsp;'}}</h3>
-            <h4 class="{{stop.name ? 'fade-in' : ''}}">{{stop.name ? stop.name : '&nbsp;'}}</h4>
+            <div class="{{stop.street ? 'fade-in' : ''}}">
+                <h3>{{stop.street ? stop.street : '&nbsp;'}}</h3>
+                <h4>{{stop.name ? stop.name : '&nbsp;'}}</h4>
+            </div>
 
             <div layout vertical center>
                 <departures-clock stopId="{{stop.id}}" radius="120" style="width: 240px;"></departures-clock>
