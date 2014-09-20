@@ -1,6 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 
-<polymer-element name="next-on-route" attributes="route time color" noscript>
+<polymer-element name="next-on-route" attributes="route time color">
     <template>
         <style>
             .next-on-route-div {
@@ -15,6 +15,14 @@
         </style>
 
         <div flex class="next-on-route-div route-label" style="color: {{color}};">{{route}}</div>
-        <div flex class="next-on-route-div route-time">{{time}}</div>
+        <div flex class="next-on-route-div {{routeTimeClass}}">{{time}}</div>
     </template>
+    <script>
+        Polymer({
+            timeChanged: function() {
+                var time = this.time;
+                this.routeTimeClass = time == 'DUE' || (time.lastIndexOf(':') > -1 && time.split(':')[0] == new Date().getHours() && time.split(':')[1] == new Date().getMinutes() + 1)  ? '' : 'route-time';
+            }
+        })
+    </script>
 </polymer-element>
