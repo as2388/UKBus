@@ -66,36 +66,26 @@
         </div>
 
         <core-drawer-panel id="drawerPanel">
+            <departures-panel drawer id="departuresPanel"></departures-panel>
 
-
-
-        <departures-panel drawer id="departuresPanel"></departures-panel>
-        <template if="{{stops}}">
-            <!--<div id="mainContainer" layout horizontal>-->
-                <!--<div style="background: #3f51b5; height: 100%; width: 200px; position: absolute; top: 0; left: 0;"></div>-->
-
-
+            <template if="{{stops}}">
                 <div id="mapContainer" class="{{showDepartures ? 'show-departures' : 'hide-departures'}}" main>
                     <google-map latitude="[[lat]]" longitude="[[lon]]" disableDefaultUI zoom="16" on-center-change="{{centerChange}}" on-tap="{{mapTapped}}">
                         <template repeat="{{stop in stops}}">
-                            <google-map-marker stopData="{{stop}}" on-marker-clicked="{{markerClicked}}" latitude="{{stop.lat}}" longitude="{{stop.lon}}" title="{{stop.name}}, {{stop.street}}"></google-map-marker>
+                            <google-map-marker stopData="{{stop}}" on-marker-clicked="{{markerClicked}}"
+                                               latitude="{{stop.lat}}" longitude="{{stop.lon}}"
+                                               title="{{stop.street}}, {{stop.name}}"></google-map-marker>
                         </template>
                     </google-map>
-                    <paper-shadow z="5"></paper-shadow>
                 </div>
-            <!--</div>-->
-        </template>
+            </template>
         </core-drawer-panel>
 
         <core-ajax id="ajaxNearbyStops" url="http://81.158.41.149:8080/UKBus/rest/stops/search?lat={{lat}}&lon={{lon}}"
                    on-core-response="{{nearbyStopsLoaded}}" handleAs="json"></core-ajax>
-
-
     </template>
     <script>
         Polymer({
-//            stops: [],
-
             domReady: function() {
                 navigator.geolocation.getCurrentPosition(this.positionLoaded.bind(this));
             },
