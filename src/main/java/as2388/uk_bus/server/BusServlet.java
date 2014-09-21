@@ -100,7 +100,7 @@ public class BusServlet {
     @GET
     @Path("/departures")
     public Response listDepartures(@QueryParam("stopId") String stopId) throws IOException {
-        Document doc = Jsoup.connect("http://www.nextbuses.mobi/WebView/BusStopSearch/BusStopSearchResults/" + stopId + "?currentPage=0").timeout(20000).get();
+        Document doc = Jsoup.connect("http://www.nextbuses.mobi/WebView/BusStopSearch/BusStopSearchResults/" + stopId + "?currentPage=100").timeout(20000).get();
         if (doc.getElementsByClass("BusStops").size() == 0) {
             return Response.noContent().build();
         }
@@ -113,7 +113,7 @@ public class BusServlet {
 
             String[] departureText = rawDeparture.getElementsByTag("td").get(1).getElementsByClass("Stops").get(0).html().split("&nbsp;");
             String destination = departureText[0];
-            String time = departureText[1].replaceAll("at |in ", "").split(" \\(")[0]; //TODO: this removes the "(DAY)" part of the time. In case e.g. the service doesn't run on weekends, a check should be done to make sure this is ok to do
+            String time = departureText[1].replaceAll("at |in ", "");
 
             //rawDepartures are sorted by time. If the time of this element is more than one hour ahead, return
             if (time.contains("min") || time.contains("DUE") || withinAnHour(time)) {
@@ -127,6 +127,10 @@ public class BusServlet {
     }
 
     private boolean withinAnHour(String time) {
+        if (time.contains("(")) {
+            return false; //TODO: fix next day detection
+        }
+
         LocalDateTime timeNow = new LocalDateTime();
         LocalDateTime busTime = new LocalDateTime(timeNow.getYear(), timeNow.getMonthOfYear(), timeNow.getDayOfMonth(),
                 Integer.valueOf(time.split(":")[0]), Integer.valueOf(time.split(":")[1]), 0);

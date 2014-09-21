@@ -1,0 +1,15 @@
+<link rel="import" href="../../bower_components/google-map/google-map.html">
+
+<polymer-element name="bus-marker" extends="google-map-marker">
+    <script>
+        Polymer({
+            mapReady: function() {
+                this.super();
+
+                google.maps.event.addListener(this.marker, 'click', function() {
+                    this.fire('marker-clicked', this.stopData)
+                }.bind(this));
+            }
+        })
+    </script>
+</polymer-element>

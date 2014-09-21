@@ -19,19 +19,22 @@
                 opacity: 0.54;
             }
             departures-clock {
-                margin-top: 50px;
+                margin-top: 25px;
             }
         </style>
 
-        <div id="mainContainer">
+        <div id="mainContainer" style="overflow-y: {{mainContainer.scrollHeight > mainContainer.clientHeight ? 'scroll' : 'auto'}};">
             <div class="{{stop.street ? 'fade-in' : ''}}">
                 <h3>{{stop.street ? stop.street : '&nbsp;'}}</h3>
                 <h4>{{stop.name ? stop.name : '&nbsp;'}}</h4>
             </div>
 
             <div layout vertical center>
-                <departures-clock stopId="{{stop.id}}" radius="120" style="width: 240px;"></departures-clock>
+                <!-- Use radius 27 for generating retina icon -->
+                <departures-clock stopId="{{stop.id}}" radius="{{140}}" style="width: 280px;"></departures-clock>
             </div>
+
+            <div style="height: 30px;"
         </div>
     </template>
 </polymer-element>

@@ -3,7 +3,7 @@
 
 <polymer-element name="next-on-route-group" attributes="departures">
     <template>
-        <div layout horizontal wrap style="width: 256px; max-width: 256px;">
+        <div layout horizontal wrap>
             <template repeat="{{departure in condensedDepartures}}">
                 <next-on-route style="min-width: 70px;" flex route="{{departure.route}}" time="{{departure.time}}" color="{{departure.color}}"></next-on-route>
             </template>
@@ -13,6 +13,10 @@
         Polymer({
             departuresChanged: function() {
                 this.condensedDepartures = [];
+
+                if (this.departures == undefined || this.departures == null) {
+                    return;
+                }
 
                 for (var i = 0; i < this.departures.length; i++) {
                     var inCondensed = false;
