@@ -1,35 +1,13 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="next-on-route.html">
 
-<polymer-element name="next-on-route-group" attributes="departures">
+<polymer-element name="next-on-route-group" attributes="departures" noscript>
     <template>
-        <div layout horizontal wrap>
-            <template repeat="{{departure in condensedDepartures}}">
-                <next-on-route style="min-width: 70px;" flex route="{{departure.route}}" time="{{departure.time}}" color="{{departure.color}}"></next-on-route>
+        <div>
+            <template repeat="{{departure in departures}}">
+                <next-on-route route="{{departure.route}}" time="{{departure.time}}"
+                               color="{{departure.color}}" destination="{{departure.destination}}"></next-on-route>
             </template>
         </div>
     </template>
-    <script>
-        Polymer({
-            departuresChanged: function() {
-                this.condensedDepartures = [];
-
-                if (this.departures == undefined || this.departures == null) {
-                    return;
-                }
-
-                for (var i = 0; i < this.departures.length; i++) {
-                    var inCondensed = false;
-                    for (var j = 0; j < this.condensedDepartures.length; j++) {
-                        if (this.condensedDepartures[j].route == this.departures[i].route) {
-                            inCondensed = true;
-                        }
-                    }
-                    if (!inCondensed) {
-                        this.condensedDepartures.push(this.departures[i])
-                    }
-                }
-            }
-        })
-    </script>
 </polymer-element>
