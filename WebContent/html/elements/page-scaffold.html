@@ -48,12 +48,14 @@
 
             <template if="{{stops}}">
                 <div id="mapContainer" class="{{showDepartures ? 'show-departures' : 'hide-departures'}}" main>
-                    <google-map latitude="[[lat]]" longitude="[[lon]]" disableDefaultUI zoom="16" on-center-change="{{centerChange}}" on-tap="{{mapTapped}}">
+                    <google-map latitude="[[lat]]" longitude="[[lon]]" disableDefaultUI zoom="16" on-center-change="{{centerChange}}" on-tap="{{mapTapped}}" showLocation="true">
                         <template repeat="{{stop in stops}}">
                             <google-map-marker stopData="{{stop}}" on-marker-clicked="{{markerClicked}}"
                                                latitude="{{stop.lat}}" longitude="{{stop.lon}}"
                                                title="{{stop.street}}, {{stop.name}}"></google-map-marker>
+
                         </template>
+                        <!--<google-map-marker latitude="{{lat}}" longitude="{{lon}}" title="Your location"></google-map-marker>-->
                     </google-map>
                 </div>
             </template>
