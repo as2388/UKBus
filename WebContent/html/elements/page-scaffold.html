@@ -30,11 +30,11 @@
             }
             #loadingIndicator {
                 position: absolute;
-                width: 600px;
+                width: 260px;
                 left: 50%;
                 text-align: center;
                 top: 40%;
-                margin-left: -300px;
+                margin-left: -130px;
                 color: #212121;
             }
         </style>
@@ -61,7 +61,7 @@
             </template>
         </core-drawer-panel>
 
-        <core-ajax id="ajaxNearbyStops" url="http://81.158.41.149:8080/UKBus/rest/stops/search?lat={{lat}}&lon={{lon}}"
+        <core-ajax id="ajaxNearbyStops" url="http://81.131.130.250:8080/UKBus/rest/stops/search?lat={{lat}}&lon={{lon}}"
                    on-core-response="{{nearbyStopsLoaded}}" handleAs="json"></core-ajax>
     </template>
     <script>
